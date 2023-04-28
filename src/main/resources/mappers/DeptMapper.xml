@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.global.ex.mapper.DeptMapper"> 
+
+  <select id="getEmpDeptOneVOList" resultType="EmpDeptVO">
+   <![CDATA[
+      select * from emp,dept where emp.deptno = dept.deptno
+   ]]>
+   </select>
+   
+   <resultMap id = "empMap" type = "EmpVO">
+   <!-- 실제 컬럼명이랑 property명 맞추면 됨. --> 
+   <id property = "empno" column ="empno"/> <!-- property means getter, setter. -->
+                                             <!-- column은 db에 있는 실제명을 뜻함 column is actual column's name in DB -->
+                                              <!-- key는 관습적으로 id 달아주고 나머지는 result 달아주면 됨 -->
+   
+      <result property="ename" column="ename"/>
+      <result property="job" column="job"/>
+      <result property="mgr" column="mgr"/>
+      <result property="hiredate" column="hiredate"/>
+      <result property="sal" column="sal"/>
+      <result property="comm" column="comm"/>
+      <result property="deptno" column="deptno"/>      
+   </resultMap>
+  
+     <resultMap id = "deptMap" type = "DeptVO">
+     <id property="deptno" column="deptno"/>
+     <result property = "dname" column="dname"/>
+     <result property = "loc" column="loc"/>   <!-- property는 setter함수 -->
+     <collection property = "empList" resultMap ="empMap"></collection>  <!-- if 1:1 relation, write like <associatrion..></associatrion..> -->
+                                                    <!-- resultMap 부분에 type적으면 절대 안됨 -->
+   </resultMap>
+  
+    <select id="getEmpDeptList" resultMap="deptMap">
+       <![CDATA[
+            select * from emp,dept where emp.deptno = dept.deptno
+      ]]>
+   </select>
+
+
+</mapper>
+
